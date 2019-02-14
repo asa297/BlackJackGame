@@ -7,11 +7,18 @@ const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(bodyParser.json());
-
 //require
 require("dotenv").config();
+
+const mongoose = require("mongoose");
+mongoose.connect(
+  `mongodb://${process.env.DB_USERNAME}:${
+    process.env.DB_PASSWORD
+  }@ds135335.mlab.com:35335/db_blackjack`
+);
+
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
 
 app
   .prepare()
