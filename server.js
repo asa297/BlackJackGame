@@ -1,31 +1,36 @@
 const express = require("express");
+const app = express();
+const server = require("http").createServer(app);
+const io = require("socket.io")(server);
 const next = require("next");
-const server = express();
+
 const bodyParser = require("body-parser");
 
 const dev = process.env.NODE_ENV !== "production";
-const app = next({ dev });
-const handle = app.getRequestHandler();
+const nextApp = next({ dev });
+const handle = nextApp.getRequestHandler();
+const mongoose = require("mongoose");
 
 //require
 require("dotenv").config();
 require("./models/UserModel");
 require("./models/ScoreModel");
 
-const mongoose = require("mongoose");
 mongoose.connect(
   `mongodb://${process.env.DB_USERNAME}:${
     process.env.DB_PASSWORD
   }@ds135335.mlab.com:35335/db_blackjack`
 );
 
-server.use(bodyParser.urlencoded({ extended: true }));
-server.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app
+nextApp
   .prepare()
   .then(() => {
-    server.get("*", (req, res) => {
+    require("./routes/SocketRoute")(io);
+
+    app.get("*", (req, res) => {
       return handle(req, res);
     });
 
