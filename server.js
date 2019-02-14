@@ -9,6 +9,8 @@ const handle = app.getRequestHandler();
 
 //require
 require("dotenv").config();
+require("./models/UserModel");
+require("./models/ScoreModel");
 
 const mongoose = require("mongoose");
 mongoose.connect(
