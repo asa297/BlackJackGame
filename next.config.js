@@ -9,7 +9,10 @@ module.exports = withCSS({
     // Perform customizations to webpack config
     // Important: return the modified config
     config.resolve.alias = {
-      components: path.resolve(__dirname, "components")
+      "<components>": path.resolve(__dirname, "./components"),
+      "<actions>": path.resolve(__dirname, "./stores/actions"),
+      "<reducers>": path.resolve(__dirname, "./stores/reducers"),
+      "<utils>": path.resolve(__dirname, "./utils")
     };
     new Dotenv({
       path: path.join(__dirname, ".env"),

@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { PlayGame } from "../stores/actions/index";
+import { PlayGame } from "<actions>";
+import { CardComponent } from "<components>";
 
 class game extends React.PureComponent {
   componentWillMount() {
@@ -8,8 +9,11 @@ class game extends React.PureComponent {
   }
 
   render() {
-    console.log(this.props);
-    return <>test</>;
+    return (
+      <>
+        <CardComponent />
+      </>
+    );
   }
 }
 
