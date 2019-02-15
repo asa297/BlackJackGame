@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+
 const next = require("next");
 
 const bodyParser = require("body-parser");
@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 nextApp
   .prepare()
   .then(() => {
-    require("./routes/SocketRoute")(io);
+    require("./routes/GamingRoute")(app);
 
     app.get("*", (req, res) => {
       return handle(req, res);

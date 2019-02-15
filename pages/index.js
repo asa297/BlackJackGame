@@ -1,15 +1,32 @@
 import React from "react";
 
+import Router from "next/router";
+
 class Main extends React.PureComponent {
-  testfunction() {
-    this.props.socket.emit("joinroom", { id: 5 });
+  state = {
+    username: null
+  };
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  _Play() {
+    const { username } = this.state;
+    if (username) {
+      // PlayGame(this.props.socket, { username });
+      Router.push("/game");
+      // this.props.socket.on("matchroom", room => {
+      //   console.log(room);
+      // });
+    }
   }
 
   render() {
     return (
-      <div>
-        Hello Example <button onClick={() => this.testfunction()}>test</button>
-      </div>
+      <>
+        <input name="username" type="text" onChange={this.handleChange} />
+        <button onClick={() => this._Play()}>play</button>
+      </>
     );
   }
 }
