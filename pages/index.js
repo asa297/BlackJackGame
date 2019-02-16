@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { PlayGame } from "<actions>";
+import { PlayGame, HitCard, StandCard } from "<actions>";
 import { MainPage, PlayPage } from "<components>";
 
 class Main extends React.PureComponent {
@@ -8,6 +8,7 @@ class Main extends React.PureComponent {
     username: null,
     playing: false
   };
+
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -21,8 +22,14 @@ class Main extends React.PureComponent {
     }
   }
 
+  _Hit() {
+    const { username } = this.state;
+    this.props.HitCard(username);
+  }
+
   render() {
     const { playing } = this.state;
+    console.log(this.props);
     return (
       <>
         {!playing ? (
@@ -31,7 +38,12 @@ class Main extends React.PureComponent {
             _Play={e => this._Play(e)}
           />
         ) : (
-          <PlayPage cards={this.props.CardReducer} />
+          <PlayPage
+            playerCards={this.props.PlayerCardReducer}
+            serverCards={this.props.ServerCardReducer}
+            resultGame={this.props.ResultGameReducer}
+            hit={() => this._Hit()}
+          />
         )}
       </>
     );
@@ -39,6 +51,10 @@ class Main extends React.PureComponent {
 }
 
 export default connect(
-  ({ CardReducer }) => ({ CardReducer }),
-  { PlayGame }
+  ({ PlayerCardReducer, ServerCardReducer, ResultGameReducer }) => ({
+    PlayerCardReducer,
+    ServerCardReducer,
+    ResultGameReducer
+  }),
+  { PlayGame, HitCard, StandCard }
 )(Main);

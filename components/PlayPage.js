@@ -2,21 +2,21 @@ import styled from "styled-components";
 import { Button } from "antd";
 import { CardComponent } from "<components>";
 
-const PlayPage = ({ cards }) => {
+const PlayPage = ({ playerCards, hit }) => {
   return (
     <Container>
       <DisplayCard>
-        {cards.map(card => {
+        {playerCards.map(card => {
           return (
-            <CardContainer>
-              <CardComponent code={card.code} key={card.key} />
+            <CardContainer key={card.key}>
+              <CardComponent code={card.code} />
             </CardContainer>
           );
         })}
       </DisplayCard>
       <ActionCard>
         <ActionContainer>
-          <ActionButton ghost border="red">
+          <ActionButton ghost border="red" onClick={() => hit()}>
             Hit
           </ActionButton>
         </ActionContainer>

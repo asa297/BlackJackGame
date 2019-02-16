@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 
-import CardReducer from "./CardReducer";
+import PlayerCardReducer from "./PlayerCardReducer";
+import ServerCardReducer from "./ServerCardReducer";
+import ResultGameReducer from "./ResultGameReducer";
 
 export default combineReducers({
-  CardReducer
+  PlayerCardReducer,
+  ServerCardReducer,
+  ResultGameReducer
 });
