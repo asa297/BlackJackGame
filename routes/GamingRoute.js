@@ -1,4 +1,5 @@
 let { cards } = require("../static/data.json");
+const requireUserName = require("../middlewares/requireUserName");
 let server_cards = [];
 let player_cards = [];
 
@@ -24,12 +25,24 @@ const RandomCard = () => {
 };
 
 module.exports = app => {
-  app.get("/api/game", (req, res) => {
+  app.get("/api/game/:username", requireUserName, (req, res) => {
     ResetCards();
 
     player_cards = RandomCard();
     server_cards = RandomCard();
 
     res.send({ player_cards });
+  });
+
+  app.get("/api/hit", requireUserName, (req, res) => {
+    res.send();
+  });
+
+  app.get("/api/stand", requireUserName, (req, res) => {
+    res.send();
+  });
+
+  app.get("/api/board", (req, res) => {
+    res.send();
   });
 };

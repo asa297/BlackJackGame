@@ -1,34 +1,44 @@
 import React from "react";
-
-import Router from "next/router";
+import { connect } from "react-redux";
+import { PlayGame } from "<actions>";
+import { MainPage, PlayPage } from "<components>";
 
 class Main extends React.PureComponent {
   state = {
-    username: null
+    username: null,
+    playing: false
   };
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  _Play() {
+  _Play(e) {
+    e.preventDefault();
     const { username } = this.state;
     if (username) {
-      // PlayGame(this.props.socket, { username });
-      Router.push("/game");
-      // this.props.socket.on("matchroom", room => {
-      //   console.log(room);
-      // });
+      this.setState({ playing: true });
+      this.props.PlayGame(this.props.username);
     }
   }
 
   render() {
+    const { playing } = this.state;
     return (
       <>
-        <input name="username" type="text" onChange={this.handleChange} />
-        <button onClick={() => this._Play()}>play</button>
+        {!playing ? (
+          <MainPage
+            handleChange={this.handleChange}
+            _Play={e => this._Play(e)}
+          />
+        ) : (
+          <PlayPage cards={this.props.CardReducer} />
+        )}
       </>
     );
   }
 }
 
-export default Main;
+export default connect(
+  ({ CardReducer }) => ({ CardReducer }),
+  { PlayGame }
+)(Main);
