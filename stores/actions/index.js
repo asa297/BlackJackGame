@@ -34,20 +34,20 @@ export const StandCard = usenname => async dispatch => {
   const { player_cards, server_cards, resultGame } = data;
 
   console.log(data);
-  // dispatch({
-  //   type: actionTypes.FETCH_SERVER_CARDS,
-  //   payload: player_cards
-  // });
+  dispatch({
+    type: actionTypes.FETCH_SERVER_CARDS,
+    payload: player_cards
+  });
 
-  // dispatch({
-  //   type: actionTypes.FETCH_SERVER_CARDS,
-  //   payload: server_cards
-  // });
+  dispatch({
+    type: actionTypes.FETCH_SERVER_CARDS,
+    payload: server_cards
+  });
 
-  // dispatch({
-  //   type: actionTypes.RESULT_GAME,
-  //   payload: resultGame
-  // });
+  dispatch({
+    type: actionTypes.RESULT_GAME,
+    payload: resultGame
+  });
 };
 
 export const RestartGame = () => dispatch => {

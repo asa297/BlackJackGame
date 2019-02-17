@@ -32,12 +32,14 @@ class Main extends React.PureComponent {
 
   _stand() {
     const { username } = this.state;
+    clearInterval(timer);
+    this.setState({ countdown: 10 });
     this.props.StandCard(username);
   }
 
   _restart() {
     this.props.RestartGame();
-    this.setState({ playing: false });
+    this.setState({ playing: false, countdown: 10 });
   }
 
   _countdown() {
