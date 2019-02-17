@@ -133,8 +133,6 @@ const ServerDecision = cards => {
 };
 
 const RecordMatchScore = (resultGame, username) => {
-  // console.log(resultGame);
-
   return new Promise((resolve, reject) => {
     ScoreModel({
       user: username,
@@ -150,10 +148,6 @@ const RecordMatchScore = (resultGame, username) => {
           resolve("Success");
         }
       });
-
-    // setTimeout(() => {
-    //   resolve("BabelCoder!");
-    // }, 2000);
   });
 };
 
