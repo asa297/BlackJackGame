@@ -1,16 +1,25 @@
+let cards = [];
+let server_cards = [];
+let player_cards = [];
 const requireUserName = require("../middlewares/requireUserName");
 
-const GetCards = cards => {
+const ResetCards = () => {
+  cards = require("../static/data.json").cards;
+  server_cards = [];
+  player_cards = [];
+};
+
+const GetCards = () => {
   const index = Math.floor(Math.random() * cards.length);
   const card = cards[index];
   cards.splice(index, 1);
   return card;
 };
 
-const RandomCard = cards => {
+const RandomCard = () => {
   let result = [];
   for (let i = 0; i < 2; i++) {
-    result.push(GetCards(cards));
+    result.push(GetCards());
   }
   return result;
 };
@@ -68,7 +77,7 @@ const ResultCards = data => {
       const whoMaxPoint = Object.keys(data).find(key => data[key] === maxPoint);
 
       result.who = whoMaxPoint === "server_point" ? "SERVER" : "PLAYER";
-      result.status = "WIN";
+      result.status = "POINT WIN";
       result.point = maxPoint;
     }
   }
@@ -97,16 +106,26 @@ const CaludatePoint = cards => {
 module.exports = app => {
   app.get("/api/game/:username", requireUserName, (req, res) => {
     const { username } = req.params;
-    let cards = require("../static/data.json").cards;
-    const player_cards = RandomCard(cards);
-    const server_cards = RandomCard(cards);
+    ResetCards();
+    // player_cards = RandomCard();
+    // server_cards = RandomCard();
+
+    player_cards = [
+      { key: 1, name: "Ace", code: "A", value: 11 },
+      { key: 2, name: "Jack", code: "J", value: 10 }
+    ];
+    server_cards = [
+      { key: 6, name: "2", code: "2", value: 2 },
+      { key: 7, name: "3", code: "3", value: 3 }
+    ];
 
     const resultGame = ResultGame({ player_cards, server_cards });
 
     if (resultGame.status === "BLACK_JACK") {
       res.send({ player_cards, server_cards, foundWinner: true, resultGame });
+    } else {
+      res.send({ player_cards, foundWinner: undefined });
     }
-    res.send({ player_cards, foundWinner: undefined });
   });
 
   app.get("/api/hit/:username", requireUserName, (req, res) => {

@@ -36,3 +36,9 @@ export const StandCard = usenname => async dispatch => {
     payload: data.player_cards
   });
 };
+
+export const RestartGame = () => dispatch => {
+  dispatch({ type: actionTypes.RESET_PLAYER_CARDS });
+  dispatch({ type: actionTypes.RESET_SERVER_CARDS });
+  dispatch({ type: actionTypes.RESET_RESULT_GAME });
+};

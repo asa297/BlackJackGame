@@ -1,9 +1,13 @@
 import { actionTypes } from "../type";
 
-export default function(state = null, action) {
+const initState = null;
+
+export default function(state = initState, action) {
   switch (action.type) {
     case actionTypes.RESULT_GAME:
       return { ...action.payload };
+    case actionTypes.RESET_RESULT_GAME:
+      return initState;
     default:
       return state;
   }

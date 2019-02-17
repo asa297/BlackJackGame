@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { Button } from "antd";
-import { CardComponent } from "<components>";
+import { CardComponent, ResultGame, ActionCard } from "<components>";
 
-const PlayPage = ({ playerCards, hit }) => {
+const PlayPage = ({ playerCards, hit, resultGame, restart }) => {
   return (
     <Container>
+      {resultGame ? <ResultGame resultGame={resultGame} /> : null}
+
       <DisplayCard>
         {playerCards.map(card => {
           return (
@@ -14,18 +15,7 @@ const PlayPage = ({ playerCards, hit }) => {
           );
         })}
       </DisplayCard>
-      <ActionCard>
-        <ActionContainer>
-          <ActionButton ghost border="red" onClick={() => hit()}>
-            Hit
-          </ActionButton>
-        </ActionContainer>
-        <ActionContainer>
-          <ActionButton ghost border="green">
-            Stand
-          </ActionButton>
-        </ActionContainer>
-      </ActionCard>
+      <ActionCard hit={hit} resultGame={resultGame} restart={restart} />
     </Container>
   );
 };
@@ -46,21 +36,4 @@ const CardContainer = styled.div`
 const DisplayCard = styled.div`
   display: flex;
   justify-content: center;
-`;
-
-const ActionCard = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-`;
-
-const ActionButton = styled(Button)`
-  :hover {
-    border-color: ${props => props.border};
-    color: ${props => props.border};
-  }
-`;
-
-const ActionContainer = styled.div`
-  padding: 5px;
 `;

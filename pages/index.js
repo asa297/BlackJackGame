@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { PlayGame, HitCard, StandCard } from "<actions>";
+import { PlayGame, HitCard, StandCard, RestartGame } from "<actions>";
 import { MainPage, PlayPage } from "<components>";
 
 class Main extends React.PureComponent {
@@ -22,9 +22,14 @@ class Main extends React.PureComponent {
     }
   }
 
-  _Hit() {
+  _hit() {
     const { username } = this.state;
     this.props.HitCard(username);
+  }
+
+  _restart() {
+    this.props.RestartGame();
+    this.setState({ playing: false });
   }
 
   render() {
@@ -42,7 +47,8 @@ class Main extends React.PureComponent {
             playerCards={this.props.PlayerCardReducer}
             serverCards={this.props.ServerCardReducer}
             resultGame={this.props.ResultGameReducer}
-            hit={() => this._Hit()}
+            hit={() => this._hit()}
+            restart={() => this._restart()}
           />
         )}
       </>
@@ -56,5 +62,5 @@ export default connect(
     ServerCardReducer,
     ResultGameReducer
   }),
-  { PlayGame, HitCard, StandCard }
+  { PlayGame, HitCard, StandCard, RestartGame }
 )(Main);
