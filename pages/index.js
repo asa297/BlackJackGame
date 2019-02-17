@@ -11,6 +11,12 @@ class Main extends React.PureComponent {
     countdown: 10
   };
 
+  componentWillReceiveProps({ ResultGameReducer }, state) {
+    if (ResultGameReducer) {
+      clearInterval(timer);
+    }
+  }
+
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
   };
@@ -56,7 +62,7 @@ class Main extends React.PureComponent {
 
   render() {
     const { playing } = this.state;
-    // console.log(this.props);
+
     return (
       <>
         {!playing ? (

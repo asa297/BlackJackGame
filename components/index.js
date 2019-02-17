@@ -3,3 +3,4 @@ export { default as MainPage } from "./MainPage";
 export { default as PlayPage } from "./PlayPage";
 export { default as ResultGame } from "./ResultGame";
 export { default as ActionCard } from "./ActionCard";
+export { default as DisplayCard } from "./DisplayCard";

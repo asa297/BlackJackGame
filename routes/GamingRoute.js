@@ -121,17 +121,17 @@ module.exports = app => {
     const { username } = req.params;
     ResetCards();
     // player_cards = RandomCard();
-    // server_cards = RandomCard();
+    server_cards = RandomCard();
 
     player_cards = [
-      { key: 6, name: "2", code: "10", value: 10 },
-      { key: 7, name: "3", code: "10", value: 10 }
+      { key: 1, name: "Ace", code: "A", value: 11 },
+      { key: 2, name: "Jack", code: "J", value: 10 }
     ];
 
-    server_cards = [
-      { key: 6, name: "2", code: "2", value: 2 },
-      { key: 7, name: "3", code: "3", value: 3 }
-    ];
+    // server_cards = [
+    //   { key: 6, name: "2", code: "2", value: 2 },
+    //   { key: 7, name: "3", code: "3", value: 3 }
+    // ];
 
     const resultGame = ResultGame({ player_cards, server_cards });
 

@@ -5,7 +5,7 @@ const ActionCard = ({ hit, stand, resultGame, restart, countdown }) => {
   return (
     <ActionCardComponent>
       {resultGame ? (
-        <ActionButton ghost border="red" onClick={() => restart()}>
+        <ActionButton ghost border="blue" onClick={() => restart()}>
           Restart
         </ActionButton>
       ) : (

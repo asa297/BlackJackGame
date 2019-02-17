@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { CardComponent, ResultGame, ActionCard } from "<components>";
+import { ResultGame, ActionCard, DisplayCard } from "<components>";
 
 const PlayPage = ({
   playerCards,
+  serverCards,
   hit,
   stand,
   resultGame,
@@ -13,15 +14,21 @@ const PlayPage = ({
     <Container>
       {resultGame ? <ResultGame resultGame={resultGame} /> : null}
 
-      <DisplayCard>
-        {playerCards.map((card, index) => {
-          return (
-            <CardContainer key={index}>
-              <CardComponent code={card.code} />
-            </CardContainer>
-          );
-        })}
-      </DisplayCard>
+      <FlexCenterContainer>
+        <DisplayCard
+          cards={playerCards}
+          name="player"
+          label="Your Cards"
+          winner={resultGame ? resultGame.who : ""}
+        />
+        <DisplayCard
+          cards={serverCards}
+          name="server"
+          label="Server Cards"
+          winner={resultGame ? resultGame.who : ""}
+        />
+      </FlexCenterContainer>
+
       <ActionCard
         hit={hit}
         stand={stand}
@@ -42,11 +49,7 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const CardContainer = styled.div`
-  padding: 5px;
-`;
-
-const DisplayCard = styled.div`
+const FlexCenterContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
