@@ -3,6 +3,7 @@ let server_cards = [];
 let player_cards = [];
 const requireUserName = require("../middlewares/requireUserName");
 const mongoose = require("mongoose");
+const _ = require("lodash");
 const ScoreModel = mongoose.model("Scores");
 // const SERVER_PLAYER = "SERVER_PLAYER";
 // const PLAYER = "PLAYER";
@@ -129,7 +130,7 @@ const CaludatePoint = cards => {
 const ServerDecision = cards => {
   //This Function direct to this server decides to hit card for server cards
   const server_point = CaludatePoint(cards);
-  return server_point < 15;
+  return server_point < 17;
 };
 
 const RecordMatchScore = (resultGame, username) => {
@@ -168,27 +169,27 @@ module.exports = app => {
   app.get("/api/game/:username", requireUserName, async (req, res) => {
     const { username } = req.params;
     ResetCards();
-    player_cards = RandomCard();
-    server_cards = RandomCard();
+    // player_cards = RandomCard();
+    // server_cards = RandomCard();
 
-    // player_cards = [
-    //   { key: 1, name: "Ace", code: "A", value: 11 },
-    //   { key: 2, name: "Jack", code: "J", value: 10 }
-    // ];
+    player_cards = [
+      { key: 1, name: "Ace", code: "A", value: 11 },
+      { key: 2, name: "Jack", code: "J", value: 10 }
+    ];
 
-    // server_cards = [
-    //   { key: 6, name: "2", code: "2", value: 2 },
-    //   { key: 7, name: "3", code: "3", value: 3 }
-    // ];
+    server_cards = [
+      { key: 6, name: "2", code: "9", value: 9 },
+      { key: 7, name: "3", code: "8", value: 8 }
+    ];
 
-    const resultGame = ResultGame({ player_cards, server_cards });
+    // const resultGame = ResultGame({ player_cards, server_cards });
 
-    if (resultGame.status === "BLACK_JACK") {
-      await RecordMatchScore(resultGame, username);
-      res.send({ player_cards, server_cards, foundWinner: true, resultGame });
-    } else {
-      res.send({ player_cards, foundWinner: undefined });
-    }
+    // if (resultGame.status === "BLACK_JACK") {
+    //   await RecordMatchScore(resultGame, username);
+    //   res.send({ player_cards, server_cards, foundWinner: true, resultGame });
+    // } else {
+    res.send({ player_cards });
+    // }
   });
 
   app.get("/api/hit/:username", requireUserName, async (req, res) => {
@@ -246,7 +247,29 @@ module.exports = app => {
     }
   );
 
-  app.get("/api/board", (req, res) => {
-    res.send();
+  app.get("/api/board", async (req, res) => {
+    const results = await ScoreModel.aggregate([
+      {
+        $group: { _id: "$user", score: { $push: "$$ROOT" }, count: { $sum: 1 } }
+      }
+    ]);
+
+    const result_score = results.map(scores => {
+      const { score, _id: user } = scores;
+      const win = _.sumBy(score, score => {
+        return score.statusName === "WIN";
+      });
+      const lose = _.sumBy(score, score => {
+        return score.statusName === "LOSE";
+      });
+      const draw = _.sumBy(score, score => {
+        return score.statusName === "DRAW";
+      });
+
+      return { user, win, lose, draw };
+    });
+
+    // console.log(scores);
+    res.send(result_score);
   });
 };

@@ -6,18 +6,18 @@ const MainPage = ({ handleChange, _Play }) => {
   return (
     <Container>
       <h1>Hi, Input Your Name And Let's fun.</h1>
-      <form onSubmit={e => _Play(e)}>
-        <FlexContainer>
-          <Input name="username" type="text" onChange={handleChange} />
-          <FormButton type="submit" ghost>
-            GO
-          </FormButton>
-        </FlexContainer>
-      </form>
+      <FlexContainer>
+        <Input name="username" type="text" onChange={handleChange} />
+        <FormButton type="submit" ghost onClick={() => _Play()}>
+          GO
+        </FormButton>
+      </FlexContainer>
       <H1FlexCenter>OR</H1FlexCenter>
       <Link prefetch href="/board">
         <FlexCenterContainer>
-          <Button ghost>SCORE BOARD</Button>
+          <Button type="submit" ghost>
+            SCORE BOARD
+          </Button>
         </FlexCenterContainer>
       </Link>
     </Container>

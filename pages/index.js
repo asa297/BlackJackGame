@@ -21,9 +21,10 @@ class Main extends React.PureComponent {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  _Play(e) {
-    e.preventDefault();
+  _Play() {
+    // e.preventDefault();
     const { username } = this.state;
+
     if (username) {
       this.setState({ playing: true });
       this.props.PlayGame(username);
@@ -65,6 +66,7 @@ class Main extends React.PureComponent {
 
   render() {
     const { playing } = this.state;
+    // console.log(this.state);
     return (
       <>
         {!playing ? (

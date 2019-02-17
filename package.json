@@ -19,6 +19,7 @@
     "dotenv": "^6.1.0",
     "dotenv-webpack": "^1.5.7",
     "express": "^4.16.4",
+    "lodash": "^4.17.11",
     "mongoose": "^5.4.5",
     "next": "7.0.2",
     "nodemon": "^1.18.10",

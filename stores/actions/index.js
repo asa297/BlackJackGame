@@ -1,5 +1,6 @@
 import { actionTypes } from "../type";
 import axios from "axios";
+import _ from "lodash";
 
 export const PlayGame = usenname => async dispatch => {
   const { data } = await axios.get(`/api/game/${usenname}`);
@@ -66,4 +67,11 @@ export const RestartGame = () => dispatch => {
   dispatch({ type: actionTypes.RESET_PLAYER_CARDS });
   dispatch({ type: actionTypes.RESET_SERVER_CARDS });
   dispatch({ type: actionTypes.RESET_RESULT_GAME });
+};
+
+export const FetchScoreBoard = () => async dispatch => {
+  let { data } = await axios.get(`/api/board`);
+
+  data = _.orderBy(data, ["win", "lose", "draw"], "desc");
+  dispatch({ type: actionTypes.FETCH_SCORE_BOARD, payload: data });
 };

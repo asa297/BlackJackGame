@@ -1,15 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
-// import { PlayGame, HitCard, StandCard, RestartGame } from "<actions>";
+import { FetchScoreBoard } from "<actions>";
 // import { MainPage, PlayPage } from "<components>";
 
 class board extends React.PureComponent {
+  componentWillMount() {
+    this.props.FetchScoreBoard();
+  }
   render() {
     return <>test</>;
   }
 }
 
 export default connect(
-  null,
-  null
+  ({ ScoreBoardReducer }) => ({ ScoreBoardReducer }),
+  { FetchScoreBoard }
 )(board);
