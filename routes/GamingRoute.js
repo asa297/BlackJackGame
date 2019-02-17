@@ -122,6 +122,12 @@ const CaludatePoint = cards => {
   return point;
 };
 
+const ServerDecision = cards => {
+  //This Function direct to this server decides to hit card for server cards
+  const server_point = CaludatePoint(cards);
+  return server_point < 16;
+};
+
 module.exports = app => {
   app.get("/api/game/:username", requireUserName, (req, res) => {
     const { username } = req.params;
@@ -149,17 +155,34 @@ module.exports = app => {
   });
 
   app.get("/api/hit/:username", requireUserName, (req, res) => {
-    const newCard = GetCards();
-    player_cards.push(newCard);
+    const playerNewCard = GetCards();
+    player_cards.push(playerNewCard);
     const player_point = CaludatePoint(player_cards);
     if (player_point > 21) {
       const resultGame = ResultGame({ player_cards, server_cards }, "PLAYER");
       res.send({ player_cards, server_cards, foundWinner: true, resultGame });
     } else {
-      // ServerDecision()
-
-      res.send({ player_cards });
+      const server_decide = ServerDecision(server_cards);
+      if (server_decide) {
+        const serverNewCard = GetCards();
+        server_cards.push(serverNewCard);
+        const server_point = CaludatePoint(server_cards);
+        if (server_point > 21) {
+          const resultGame = ResultGame(
+            { player_cards, server_cards },
+            "SERVER"
+          );
+          res.send({
+            player_cards,
+            server_cards,
+            foundWinner: true,
+            resultGame
+          });
+        }
+      }
     }
+
+    res.send({ player_cards });
   });
 
   app.get("/api/stand/:username/:player_lose", requireUserName, (req, res) => {
