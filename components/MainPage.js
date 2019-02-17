@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Link from "next/link";
 import { Input, Button } from "antd";
 
 const MainPage = ({ handleChange, _Play }) => {
@@ -13,6 +14,12 @@ const MainPage = ({ handleChange, _Play }) => {
           </FormButton>
         </FlexContainer>
       </form>
+      <H1FlexCenter>OR</H1FlexCenter>
+      <Link prefetch href="/board">
+        <FlexCenterContainer>
+          <Button ghost>SCORE BOARD</Button>
+        </FlexCenterContainer>
+      </Link>
     </Container>
   );
 };
@@ -32,4 +39,15 @@ const FlexContainer = styled.div`
 
 const FormButton = styled(Button)`
   margin-left: 10px;
+`;
+
+const H1FlexCenter = styled.h1`
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+`;
+
+const FlexCenterContainer = styled.div`
+  display: flex;
+  justify-content: center;
 `;
