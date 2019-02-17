@@ -23,9 +23,22 @@ export const PlayGame = usenname => async dispatch => {
 
 export const HitCard = usenname => async dispatch => {
   const { data } = await axios.get(`/api/hit/${usenname}`);
+  const { player_cards, server_cards, foundWinner, resultGame } = data;
+
+  if (foundWinner) {
+    dispatch({
+      type: actionTypes.RESULT_GAME,
+      payload: resultGame
+    });
+    dispatch({
+      type: actionTypes.FETCH_SERVER_CARDS,
+      payload: server_cards
+    });
+  }
+
   dispatch({
     type: actionTypes.FETCH_PLAYER_CARDS,
-    payload: data.player_cards
+    payload: player_cards
   });
 };
 

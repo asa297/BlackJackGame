@@ -24,7 +24,7 @@ const RandomCard = () => {
   return result;
 };
 
-const ResultGame = (data, player_lose) => {
+const ResultGame = (data, player_forced_lose) => {
   let result = {
     who: undefined,
     status: undefined,
@@ -36,10 +36,12 @@ const ResultGame = (data, player_lose) => {
   const player_point = CaludatePoint(player_cards);
   const server_point = CaludatePoint(server_cards);
 
-  if (player_lose === "true") {
-    result.who = "SERVER";
-    result.status = "PLAYER FORCE LOSE";
-    result.point = server_point;
+  if (player_forced_lose) {
+    result.who = isPlayer(player_forced_lose) ? "SERVER" : "PLAYER";
+    result.status = `${
+      isPlayer(player_forced_lose) ? "PLAYER" : "SERVER"
+    } FORCE LOSE`;
+    result.point = isPlayer(player_forced_lose) ? server_point : player_point;
   } else {
     result = ResultCards({
       player_point,
@@ -102,6 +104,10 @@ const isBlackJack = (point, cards) => {
   return point === 21 && cards.length === 2;
 };
 
+const isPlayer = data => {
+  return data === "PLAYER";
+};
+
 const CaludatePoint = cards => {
   let point = 0;
   for (let i = 0; i < cards.length; i++) {
@@ -120,13 +126,13 @@ module.exports = app => {
   app.get("/api/game/:username", requireUserName, (req, res) => {
     const { username } = req.params;
     ResetCards();
-    // player_cards = RandomCard();
+    player_cards = RandomCard();
     server_cards = RandomCard();
 
-    player_cards = [
-      { key: 1, name: "Ace", code: "A", value: 11 },
-      { key: 2, name: "Jack", code: "J", value: 10 }
-    ];
+    // player_cards = [
+    //   { key: 1, name: "Ace", code: "A", value: 11 },
+    //   { key: 2, name: "Jack", code: "J", value: 10 }
+    // ];
 
     // server_cards = [
     //   { key: 6, name: "2", code: "2", value: 2 },
@@ -145,12 +151,27 @@ module.exports = app => {
   app.get("/api/hit/:username", requireUserName, (req, res) => {
     const newCard = GetCards();
     player_cards.push(newCard);
-    res.send({ player_cards });
+    const player_point = CaludatePoint(player_cards);
+    if (player_point > 21) {
+      const resultGame = ResultGame({ player_cards, server_cards }, "PLAYER");
+      res.send({ player_cards, server_cards, foundWinner: true, resultGame });
+    } else {
+      // ServerDecision()
+
+      res.send({ player_cards });
+    }
   });
 
   app.get("/api/stand/:username/:player_lose", requireUserName, (req, res) => {
+    let resultGame;
     const { player_lose } = req.params;
-    const resultGame = ResultGame({ player_cards, server_cards }, player_lose);
+
+    if (player_lose === "true") {
+      resultGame = ResultGame({ player_cards, server_cards }, "PLAYER");
+    } else {
+      resultGame = ResultGame({ player_cards, server_cards });
+    }
+
     res.send({ player_cards, server_cards, foundWinner: true, resultGame });
   });
 

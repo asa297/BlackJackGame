@@ -34,6 +34,7 @@ const H1CenterContainer = styled.h1`
 
 const FlexContainer = styled.div`
   display: flex;
+
   border: ${props =>
     props.name === props.winner.toLowerCase()
       ? "1px solid blue"

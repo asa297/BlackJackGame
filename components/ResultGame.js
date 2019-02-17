@@ -9,7 +9,7 @@ const ResultGame = ({ resultGame }) => {
       </FlexCenterContainer>
       <FlexCenterContainer>
         <h3>
-          Score : {point} ({status})
+          Score : {point} ({status === "BLACK_JACK" ? "Blackjack !!" : status})
         </h3>
       </FlexCenterContainer>
     </div>

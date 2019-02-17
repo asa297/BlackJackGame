@@ -34,6 +34,9 @@ class Main extends React.PureComponent {
   _hit() {
     const { username } = this.state;
     this.props.HitCard(username);
+    this.setState({ countdown: 10 });
+    clearInterval(timer);
+    this._countdown();
   }
 
   _stand() {
@@ -62,7 +65,7 @@ class Main extends React.PureComponent {
 
   render() {
     const { playing } = this.state;
-
+    console.log(this.props);
     return (
       <>
         {!playing ? (

@@ -21,12 +21,14 @@ const PlayPage = ({
           label="Your Cards"
           winner={resultGame ? resultGame.who : ""}
         />
-        <DisplayCard
-          cards={serverCards}
-          name="server"
-          label="Server Cards"
-          winner={resultGame ? resultGame.who : ""}
-        />
+        {serverCards.length !== 0 ? (
+          <DisplayCard
+            cards={serverCards}
+            name="server"
+            label="Server Cards"
+            winner={resultGame ? resultGame.who : ""}
+          />
+        ) : null}
       </FlexCenterContainer>
 
       <ActionCard
@@ -52,4 +54,6 @@ const Container = styled.div`
 const FlexCenterContainer = styled.div`
   display: flex;
   justify-content: center;
+
+  flex-wrap: wrap;
 `;
