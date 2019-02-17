@@ -107,17 +107,17 @@ module.exports = app => {
   app.get("/api/game/:username", requireUserName, (req, res) => {
     const { username } = req.params;
     ResetCards();
-    // player_cards = RandomCard();
-    // server_cards = RandomCard();
+    player_cards = RandomCard();
+    server_cards = RandomCard();
 
-    player_cards = [
-      { key: 1, name: "Ace", code: "A", value: 11 },
-      { key: 2, name: "Jack", code: "J", value: 10 }
-    ];
-    server_cards = [
-      { key: 6, name: "2", code: "2", value: 2 },
-      { key: 7, name: "3", code: "3", value: 3 }
-    ];
+    // player_cards = [
+    //   { key: 1, name: "Ace", code: "A", value: 11 },
+    //   { key: 2, name: "Jack", code: "J", value: 10 }
+    // ];
+    // server_cards = [
+    //   { key: 6, name: "2", code: "2", value: 2 },
+    //   { key: 7, name: "3", code: "3", value: 3 }
+    // ];
 
     const resultGame = ResultGame({ player_cards, server_cards });
 
@@ -134,8 +134,9 @@ module.exports = app => {
     res.send({ player_cards });
   });
 
-  app.get("/api/stand", requireUserName, (req, res) => {
-    res.send();
+  app.get("/api/stand/:username", requireUserName, (req, res) => {
+    const resultGame = ResultGame({ player_cards, server_cards });
+    res.send({ player_cards, server_cards, foundWinner: true, resultGame });
   });
 
   app.get("/api/board", (req, res) => {

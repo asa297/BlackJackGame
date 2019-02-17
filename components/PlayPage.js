@@ -1,21 +1,34 @@
 import styled from "styled-components";
 import { CardComponent, ResultGame, ActionCard } from "<components>";
 
-const PlayPage = ({ playerCards, hit, resultGame, restart }) => {
+const PlayPage = ({
+  playerCards,
+  hit,
+  stand,
+  resultGame,
+  restart,
+  countdown
+}) => {
   return (
     <Container>
       {resultGame ? <ResultGame resultGame={resultGame} /> : null}
 
       <DisplayCard>
-        {playerCards.map(card => {
+        {playerCards.map((card, index) => {
           return (
-            <CardContainer key={card.key}>
+            <CardContainer key={index}>
               <CardComponent code={card.code} />
             </CardContainer>
           );
         })}
       </DisplayCard>
-      <ActionCard hit={hit} resultGame={resultGame} restart={restart} />
+      <ActionCard
+        hit={hit}
+        stand={stand}
+        resultGame={resultGame}
+        restart={restart}
+        countdown={countdown}
+      />
     </Container>
   );
 };

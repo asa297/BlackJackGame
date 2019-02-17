@@ -3,10 +3,12 @@ import { connect } from "react-redux";
 import { PlayGame, HitCard, StandCard, RestartGame } from "<actions>";
 import { MainPage, PlayPage } from "<components>";
 
+let timer;
 class Main extends React.PureComponent {
   state = {
     username: null,
-    playing: false
+    playing: false,
+    countdown: 10
   };
 
   handleChange = event => {
@@ -18,7 +20,8 @@ class Main extends React.PureComponent {
     const { username } = this.state;
     if (username) {
       this.setState({ playing: true });
-      this.props.PlayGame(this.props.username);
+      this.props.PlayGame(username);
+      this._countdown();
     }
   }
 
@@ -27,9 +30,26 @@ class Main extends React.PureComponent {
     this.props.HitCard(username);
   }
 
+  _stand() {
+    const { username } = this.state;
+    this.props.StandCard(username);
+  }
+
   _restart() {
     this.props.RestartGame();
     this.setState({ playing: false });
+  }
+
+  _countdown() {
+    timer = setInterval(() => {
+      let { countdown } = this.state;
+
+      this.setState({ countdown: --countdown });
+
+      if (countdown === 0) {
+        clearInterval(timer);
+      }
+    }, 1000);
   }
 
   render() {
@@ -48,7 +68,9 @@ class Main extends React.PureComponent {
             serverCards={this.props.ServerCardReducer}
             resultGame={this.props.ResultGameReducer}
             hit={() => this._hit()}
+            stand={() => this._stand()}
             restart={() => this._restart()}
+            countdown={this.state.countdown}
           />
         )}
       </>

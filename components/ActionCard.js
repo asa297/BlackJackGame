@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Button } from "antd";
 
-const ActionCard = ({ hit, resultGame, restart }) => {
+const ActionCard = ({ hit, stand, resultGame, restart, countdown }) => {
   return (
     <ActionCardComponent>
       {resultGame ? (
@@ -12,12 +12,12 @@ const ActionCard = ({ hit, resultGame, restart }) => {
         <FlexContainer>
           <ActionContainer>
             <ActionButton ghost border="red" onClick={() => hit()}>
-              Hit
+              Hit {countdown}
             </ActionButton>
           </ActionContainer>
           <ActionContainer>
-            <ActionButton ghost border="green">
-              Stand
+            <ActionButton ghost border="green" onClick={() => stand()}>
+              Stand {countdown}
             </ActionButton>
           </ActionContainer>
         </FlexContainer>
