@@ -29,11 +29,10 @@ export const HitCard = usenname => async dispatch => {
   });
 };
 
-export const StandCard = usenname => async dispatch => {
-  const { data } = await axios.get(`/api/stand/${usenname}`);
+export const StandCard = (usenname, player_lose = false) => async dispatch => {
+  const { data } = await axios.get(`/api/stand/${usenname}/${player_lose}`);
   const { player_cards, server_cards, resultGame } = data;
 
-  console.log(data);
   dispatch({
     type: actionTypes.FETCH_SERVER_CARDS,
     payload: player_cards

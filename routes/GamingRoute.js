@@ -24,18 +24,30 @@ const RandomCard = () => {
   return result;
 };
 
-const ResultGame = data => {
+const ResultGame = (data, player_lose) => {
+  let result = {
+    who: undefined,
+    status: undefined,
+    point: -1
+  };
+
   const { player_cards, server_cards } = data;
 
   const player_point = CaludatePoint(player_cards);
   const server_point = CaludatePoint(server_cards);
 
-  const result = ResultCards({
-    player_point,
-    player_cards,
-    server_point,
-    server_cards
-  });
+  if (player_lose === "true") {
+    result.who = "SERVER";
+    result.status = "PLAYER FORCE LOSE";
+    result.point = server_point;
+  } else {
+    result = ResultCards({
+      player_point,
+      player_cards,
+      server_point,
+      server_cards
+    });
+  }
 
   return result;
 };
@@ -51,6 +63,7 @@ const ResultCards = data => {
 
   const player_isBlackJack = isBlackJack(player_point, player_cards);
   const server_isBlackJack = isBlackJack(server_point, server_cards);
+
   if (player_isBlackJack && server_isBlackJack) {
     result.status = "BLACK_JACK";
     result.point = 21;
@@ -107,17 +120,18 @@ module.exports = app => {
   app.get("/api/game/:username", requireUserName, (req, res) => {
     const { username } = req.params;
     ResetCards();
-    player_cards = RandomCard();
-    server_cards = RandomCard();
+    // player_cards = RandomCard();
+    // server_cards = RandomCard();
 
-    // player_cards = [
-    //   { key: 1, name: "Ace", code: "A", value: 11 },
-    //   { key: 2, name: "Jack", code: "J", value: 10 }
-    // ];
-    // server_cards = [
-    //   { key: 6, name: "2", code: "2", value: 2 },
-    //   { key: 7, name: "3", code: "3", value: 3 }
-    // ];
+    player_cards = [
+      { key: 6, name: "2", code: "10", value: 10 },
+      { key: 7, name: "3", code: "10", value: 10 }
+    ];
+
+    server_cards = [
+      { key: 6, name: "2", code: "2", value: 2 },
+      { key: 7, name: "3", code: "3", value: 3 }
+    ];
 
     const resultGame = ResultGame({ player_cards, server_cards });
 
@@ -134,8 +148,9 @@ module.exports = app => {
     res.send({ player_cards });
   });
 
-  app.get("/api/stand/:username", requireUserName, (req, res) => {
-    const resultGame = ResultGame({ player_cards, server_cards });
+  app.get("/api/stand/:username/:player_lose", requireUserName, (req, res) => {
+    const { player_lose } = req.params;
+    const resultGame = ResultGame({ player_cards, server_cards }, player_lose);
     res.send({ player_cards, server_cards, foundWinner: true, resultGame });
   });
 

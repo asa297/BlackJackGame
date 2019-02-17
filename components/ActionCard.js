@@ -12,12 +12,12 @@ const ActionCard = ({ hit, stand, resultGame, restart, countdown }) => {
         <FlexContainer>
           <ActionContainer>
             <ActionButton ghost border="red" onClick={() => hit()}>
-              Hit {countdown}
+              Hit({countdown})
             </ActionButton>
           </ActionContainer>
           <ActionContainer>
             <ActionButton ghost border="green" onClick={() => stand()}>
-              Stand {countdown}
+              Stand({countdown})
             </ActionButton>
           </ActionContainer>
         </FlexContainer>

@@ -44,11 +44,11 @@ class Main extends React.PureComponent {
 
   _countdown() {
     timer = setInterval(() => {
-      let { countdown } = this.state;
-
+      let { countdown, username } = this.state;
       this.setState({ countdown: --countdown });
 
       if (countdown === 0) {
+        this.props.StandCard(username, true);
         clearInterval(timer);
       }
     }, 1000);
@@ -56,7 +56,7 @@ class Main extends React.PureComponent {
 
   render() {
     const { playing } = this.state;
-    console.log(this.props);
+    // console.log(this.props);
     return (
       <>
         {!playing ? (
