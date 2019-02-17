@@ -65,7 +65,6 @@ class Main extends React.PureComponent {
 
   render() {
     const { playing } = this.state;
-    console.log(this.props);
     return (
       <>
         {!playing ? (

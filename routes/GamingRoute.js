@@ -2,6 +2,10 @@ let cards = [];
 let server_cards = [];
 let player_cards = [];
 const requireUserName = require("../middlewares/requireUserName");
+const mongoose = require("mongoose");
+const ScoreModel = mongoose.model("Scores");
+// const SERVER_PLAYER = "SERVER_PLAYER";
+// const PLAYER = "PLAYER";
 
 const ResetCards = () => {
   cards = require("../static/data.json").cards;
@@ -125,11 +129,49 @@ const CaludatePoint = cards => {
 const ServerDecision = cards => {
   //This Function direct to this server decides to hit card for server cards
   const server_point = CaludatePoint(cards);
-  return server_point < 16;
+  return server_point < 15;
+};
+
+const RecordMatchScore = (resultGame, username) => {
+  // console.log(resultGame);
+
+  return new Promise((resolve, reject) => {
+    ScoreModel({
+      user: username,
+      statusName: DefineMatchStatus(resultGame.who),
+      recordDate: new Date()
+    })
+      .save()
+      .then((score, err) => {
+        if (err) {
+          reject("Error");
+        }
+        if (score) {
+          resolve("Success");
+        }
+      });
+
+    // setTimeout(() => {
+    //   resolve("BabelCoder!");
+    // }, 2000);
+  });
+};
+
+const DefineMatchStatus = player => {
+  let result;
+  switch (player) {
+    case "SERVER":
+      return "LOSE";
+    case "PLAYER":
+      return "WIN";
+    case undefined:
+      return "DRAW";
+  }
+  return result;
 };
 
 module.exports = app => {
-  app.get("/api/game/:username", requireUserName, (req, res) => {
+  app.get("/api/game/:username", requireUserName, async (req, res) => {
     const { username } = req.params;
     ResetCards();
     player_cards = RandomCard();
@@ -148,18 +190,22 @@ module.exports = app => {
     const resultGame = ResultGame({ player_cards, server_cards });
 
     if (resultGame.status === "BLACK_JACK") {
+      await RecordMatchScore(resultGame, username);
       res.send({ player_cards, server_cards, foundWinner: true, resultGame });
     } else {
       res.send({ player_cards, foundWinner: undefined });
     }
   });
 
-  app.get("/api/hit/:username", requireUserName, (req, res) => {
+  app.get("/api/hit/:username", requireUserName, async (req, res) => {
+    const { username } = req.params;
+
     const playerNewCard = GetCards();
     player_cards.push(playerNewCard);
     const player_point = CaludatePoint(player_cards);
     if (player_point > 21) {
       const resultGame = ResultGame({ player_cards, server_cards }, "PLAYER");
+      await RecordMatchScore(resultGame, username);
       res.send({ player_cards, server_cards, foundWinner: true, resultGame });
     } else {
       const server_decide = ServerDecision(server_cards);
@@ -172,6 +218,7 @@ module.exports = app => {
             { player_cards, server_cards },
             "SERVER"
           );
+          await RecordMatchScore(resultGame, username);
           res.send({
             player_cards,
             server_cards,
@@ -185,18 +232,25 @@ module.exports = app => {
     res.send({ player_cards });
   });
 
-  app.get("/api/stand/:username/:player_lose", requireUserName, (req, res) => {
-    let resultGame;
-    const { player_lose } = req.params;
+  app.get(
+    "/api/stand/:username/:player_lose",
+    requireUserName,
+    async (req, res) => {
+      let resultGame;
 
-    if (player_lose === "true") {
-      resultGame = ResultGame({ player_cards, server_cards }, "PLAYER");
-    } else {
-      resultGame = ResultGame({ player_cards, server_cards });
+      const { player_lose, username } = req.params;
+
+      if (player_lose === "true") {
+        resultGame = ResultGame({ player_cards, server_cards }, "PLAYER");
+      } else {
+        resultGame = ResultGame({ player_cards, server_cards });
+      }
+
+      await RecordMatchScore(resultGame, username);
+
+      res.send({ player_cards, server_cards, foundWinner: true, resultGame });
     }
-
-    res.send({ player_cards, server_cards, foundWinner: true, resultGame });
-  });
+  );
 
   app.get("/api/board", (req, res) => {
     res.send();
