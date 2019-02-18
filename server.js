@@ -13,14 +13,9 @@ const mongoose = require("mongoose");
 
 //require
 require("dotenv").config();
-require("./models/UserModel");
 require("./models/ScoreModel");
 
-mongoose.connect(
-  `mongodb://${process.env.DB_USERNAME}:${
-    process.env.DB_PASSWORD
-  }@ds135335.mlab.com:35335/db_blackjack`
-);
+mongoose.connect(`${process.env.DB}`);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

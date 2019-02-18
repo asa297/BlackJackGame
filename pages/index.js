@@ -21,8 +21,11 @@ class Main extends React.PureComponent {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  _Play() {
-    // e.preventDefault();
+  _Play(e) {
+    if (e) {
+      e.preventDefault();
+    }
+
     const { username } = this.state;
 
     if (username) {
