@@ -167,20 +167,20 @@ const DefineMatchStatus = player => {
 
 module.exports = app => {
   app.get("/api/game/:username", requireUserName, async (req, res) => {
-    const { username } = req.params;
+    // const { username } = req.params;
     ResetCards();
-    // player_cards = RandomCard();
-    // server_cards = RandomCard();
+    player_cards = RandomCard();
+    server_cards = RandomCard();
 
-    player_cards = [
-      { key: 1, name: "Ace", code: "A", value: 11 },
-      { key: 2, name: "Jack", code: "J", value: 10 }
-    ];
+    // player_cards = [
+    //   { key: 1, name: "Ace", code: "A", value: 11 },
+    //   { key: 2, name: "Jack", code: "J", value: 10 }
+    // ];
 
-    server_cards = [
-      { key: 6, name: "2", code: "9", value: 9 },
-      { key: 7, name: "3", code: "8", value: 8 }
-    ];
+    // server_cards = [
+    //   { key: 6, name: "2", code: "9", value: 9 },
+    //   { key: 7, name: "3", code: "8", value: 8 }
+    // ];
 
     // const resultGame = ResultGame({ player_cards, server_cards });
 
@@ -269,7 +269,6 @@ module.exports = app => {
       return { user, win, lose, draw };
     });
 
-    // console.log(scores);
     res.send(result_score);
   });
 };
